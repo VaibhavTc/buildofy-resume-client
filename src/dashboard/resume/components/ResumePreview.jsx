@@ -1,22 +1,25 @@
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import PersonalDetailsPreview from "./preview/PersonalDetailsPreview";
 import SummaryPreview from "./preview/SummaryPreview";
 import ExperiencePreview from "./preview/ExperiencePreview";
 import EducationalPreview from "./preview/EducationalPreview";
 import SkillsPreview from "./preview/SkillsPreview";
+
 function ResumePreview() {
-  const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
+  const { resumeInfo } = useContext(ResumeInfoContext);
   return (
     <div
-      className="shadow-lg h-[55.5rem] p-14 border-t-[20px] w-[42rem]"
+      className="shadow-lg p-14 border-t-[20px] border m-auto"
       style={{
+        width: "792px",
+        height: "1122px",
         borderColor: resumeInfo?.themeColor,
       }}
     >
       {/* Personal Detail  */}
       <PersonalDetailsPreview resumeInfo={resumeInfo} />
-      {/* Summery  */}
+      {/* Summary  */}
       <SummaryPreview resumeInfo={resumeInfo} />
       {/* Professional Experience  */}
       {resumeInfo?.experience?.length > 0 && (
@@ -26,7 +29,7 @@ function ResumePreview() {
       {resumeInfo?.education?.length > 0 && (
         <EducationalPreview resumeInfo={resumeInfo} />
       )}
-      {/* Skilss  */}
+      {/* Skills  */}
       {resumeInfo?.skills?.length > 0 && (
         <SkillsPreview resumeInfo={resumeInfo} />
       )}

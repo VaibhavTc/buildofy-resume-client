@@ -55,7 +55,6 @@ function Skills() {
 
     GlobalApi.UpdateResumeDetail(resumeId, data).then(
       (resp) => {
-        console.log(resp);
         setLoading(false);
         toast.success("Details updated !");
       },

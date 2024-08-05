@@ -50,7 +50,6 @@ function ThemeColor() {
       },
     };
     GlobalApi.UpdateResumeDetail(resumeId, data).then((resp) => {
-      console.log(resp);
       toast("Theme Color Updated");
     });
   };

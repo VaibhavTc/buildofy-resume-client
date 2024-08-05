@@ -47,7 +47,6 @@ const Experience = () => {
   };
 
   const handleRichTextEditor = (event, name, index) => {
-    console.log("Rich Text Editor Change:", event.target.value); // Log editor content
     const newEntries = [...experinceList];
     newEntries[index][name] = event.target.value;
     setExperinceList(newEntries);
@@ -75,7 +74,6 @@ const Experience = () => {
         })),
       },
     };
-    console.log("data", data);
     GlobalApi.UpdateResumeDetail(params?.resumeId, data).then(
       (res) => {
         setLoading(false);
@@ -84,7 +82,6 @@ const Experience = () => {
       (error) => {
         setLoading(false);
         toast.error("Server Error, Please try again!");
-        console.error(error.response);
       }
     );
   };

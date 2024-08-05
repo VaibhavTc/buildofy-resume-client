@@ -17,7 +17,6 @@ function PersonalDetail({ enabledNext }) {
   // }, []);
 
   const handleInputChange = (e) => {
-    // console.log("target", e.target);
     enabledNext(false);
     const { name, value } = e.target;
     setFormData({
@@ -29,17 +28,14 @@ function PersonalDetail({ enabledNext }) {
       [name]: value,
     });
   };
-  // console.log("formData", formData);
   const onSave = (e) => {
     e.preventDefault();
     setLoading(true);
     const data = {
       data: formData,
     };
-    // console.log("data", data);
     GlobalApi.UpdateResumeDetail(params?.resumeId, data).then(
       (resp) => {
-        // console.log(resp);
         enabledNext(true);
         setLoading(false);
         toast.success("Details updated");

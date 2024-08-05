@@ -38,9 +38,6 @@ function RichTextEditor({ onRichTextEditorChange, index, defaultValue }) {
     ).replace("{companyName}", resumeInfo?.experience[index].companyName);
     const result = await AIChatSession.sendMessage(prompt);
     const resp = result.response.text();
-    console.log("resp", resp);
-    // console.log(JSON.parse(resp).experience);
-    // setValue(resp.replace("[", "").replace("]", ""));
     setValue(resp.replace('"', '"'));
     setLoading(false);
   };

@@ -1,7 +1,6 @@
 import React from "react";
 
 function ExperiencePreview({ resumeInfo }) {
-  console.log("experience", resumeInfo.experience);
   return (
     <div className="my-6">
       <h2

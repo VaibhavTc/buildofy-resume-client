@@ -16,7 +16,6 @@ function ViewResume() {
   }, []);
   const GetResumeInfo = () => {
     GlobalApi.GetResumeById(resumeId).then((resp) => {
-      console.log(resp.data.data);
       setResumeInfo(resp.data.data);
     });
   };
@@ -29,7 +28,7 @@ function ViewResume() {
     <ResumeInfoContext.Provider value={{ resumeInfo, setResumeInfo }}>
       <div id="no-print">
         <Header />
-        <div className="my-10 mx-10 md:mx-20 lg:mx-36">
+        <div className="my-10 mx-10 md:mx-20 lg:mx-36 py-4">
           <h2 className="text-center text-2xl font-medium">
             Congrats! Your Ultimate AI generates Resume is ready !{" "}
           </h2>
@@ -53,18 +52,17 @@ function ViewResume() {
                   resumeInfo?.lastName +
                   " resume",
               }}
-              onClick={() => console.log("shared successfully!")}
             >
               <Button variant="outline">Share 🔗</Button>
             </RWebShare>
           </div>
         </div>
       </div>
-      <div className="my-10 mx-10 md:mx-20 lg:mx-36">
-        <div id="print-area">
-          <ResumePreview />
-        </div>
+      {/* <div className="my-10 mx-10 md:mx-20 lg:mx-36"> */}
+      <div>
+        <ResumePreview id="print-area" />
       </div>
+      {/* </div> */}
     </ResumeInfoContext.Provider>
   );
 }

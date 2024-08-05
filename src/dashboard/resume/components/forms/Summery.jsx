@@ -12,7 +12,6 @@ const prompt =
   "Job Title: {jobTitle} , Depends on job title give me list of  summery for 3 experience level, Mid Level and Freasher level in 3 -4 lines in array format, With summery and experience_level Field in JSON Format";
 function Summery({ enabledNext }) {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
-  console.log(resumeInfo);
   const [summery, setSummery] = useState();
   const [loading, setLoading] = useState(false);
   const params = useParams();
@@ -28,9 +27,7 @@ function Summery({ enabledNext }) {
   const GenerateSummeryFromAI = async () => {
     setLoading(true);
     const PROMPT = prompt.replace("{jobTitle}", resumeInfo?.jobTitle);
-    console.log(PROMPT);
     const result = await AIChatSession.sendMessage(PROMPT);
-    console.log(JSON.parse(result.response.text()));
 
     setAiGenerateSummeryList(JSON.parse(result.response.text()));
     setLoading(false);
@@ -47,7 +44,6 @@ function Summery({ enabledNext }) {
     };
     GlobalApi.UpdateResumeDetail(params?.resumeId, data).then(
       (resp) => {
-        console.log(resp);
         enabledNext(true);
         setLoading(false);
         toast.success("Details updated");

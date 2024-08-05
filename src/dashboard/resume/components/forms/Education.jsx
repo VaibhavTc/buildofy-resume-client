@@ -64,7 +64,6 @@ function Education() {
       },
     };
 
-    console.log("data", data);
     GlobalApi.UpdateResumeDetail(params.resumeId, data).then(
       (resp) => {
         setLoading(false);
