@@ -11,10 +11,27 @@ function PersonalDetail({ enabledNext }) {
   const params = useParams();
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
 
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState({
+    firstName: resumeInfo?.firstName || "",
+    lastName: resumeInfo?.lastName || "",
+    jobTitle: resumeInfo?.jobTitle || "",
+    address: resumeInfo?.address || "",
+    phone: resumeInfo?.phone || "",
+    email: resumeInfo?.email || "",
+  });
+
   const [loading, setLoading] = useState(false);
-  // useEffect(() => {
-  // }, []);
+
+  useEffect(() => {
+    setFormData({
+      firstName: resumeInfo?.firstName || "",
+      lastName: resumeInfo?.lastName || "",
+      jobTitle: resumeInfo?.jobTitle || "",
+      address: resumeInfo?.address || "",
+      phone: resumeInfo?.phone || "",
+      email: resumeInfo?.email || "",
+    });
+  }, [resumeInfo]);
 
   const handleInputChange = (e) => {
     enabledNext(false);
@@ -23,29 +40,35 @@ function PersonalDetail({ enabledNext }) {
       ...formData,
       [name]: value,
     });
-    setResumeInfo({
-      ...resumeInfo,
-      [name]: value,
-    });
   };
+
   const onSave = (e) => {
     e.preventDefault();
     setLoading(true);
+    
     const data = {
-      data: formData,
+        data: formData,
     };
+
     GlobalApi.UpdateResumeDetail(params?.resumeId, data).then(
-      (resp) => {
-        enabledNext(true);
-        setLoading(false);
-        toast.success("Details updated");
-      },
-      (error) => {
-        setLoading(false);
-        toast.error("Something went wrong. Try again!");
-      }
+        (resp) => {
+            enabledNext(true);
+            setLoading(false);
+            // Merge the updated personal details with the existing resumeInfo
+            setResumeInfo({
+                ...resumeInfo, // Keep the existing fields intact
+                ...formData,   // Update only the fields in formData
+            });
+            toast.success("Details updated");
+        },
+        (error) => {
+            setLoading(false);
+            toast.error("Something went wrong. Try again!");
+        }
     );
-  };
+};
+
+
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">
       <h2 className="font-bold text-lg">Personal Detail</h2>
@@ -57,7 +80,7 @@ function PersonalDetail({ enabledNext }) {
             <label className="text-sm">First Name</label>
             <Input
               name="firstName"
-              defaultValue={resumeInfo?.firstName}
+              value={formData.firstName}
               required
               onChange={handleInputChange}
             />
@@ -67,8 +90,8 @@ function PersonalDetail({ enabledNext }) {
             <Input
               name="lastName"
               required
+              value={formData.lastName}
               onChange={handleInputChange}
-              defaultValue={resumeInfo?.lastName}
             />
           </div>
           <div className="col-span-2">
@@ -76,7 +99,7 @@ function PersonalDetail({ enabledNext }) {
             <Input
               name="jobTitle"
               required
-              defaultValue={resumeInfo?.jobTitle}
+              value={formData.jobTitle}
               onChange={handleInputChange}
             />
           </div>
@@ -85,7 +108,7 @@ function PersonalDetail({ enabledNext }) {
             <Input
               name="address"
               required
-              defaultValue={resumeInfo?.address}
+              value={formData.address}
               onChange={handleInputChange}
             />
           </div>
@@ -94,7 +117,7 @@ function PersonalDetail({ enabledNext }) {
             <Input
               name="phone"
               required
-              defaultValue={resumeInfo?.phone}
+              value={formData.phone}
               onChange={handleInputChange}
             />
           </div>
@@ -103,7 +126,7 @@ function PersonalDetail({ enabledNext }) {
             <Input
               name="email"
               required
-              defaultValue={resumeInfo?.email}
+              value={formData.email}
               onChange={handleInputChange}
             />
           </div>

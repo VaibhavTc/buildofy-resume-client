@@ -5,7 +5,8 @@ export default {
   address: "123 Main St, Anytown USA",
   phone: "555-555-5555",
   email: "bS6pL@example.com",
-  summery: "I am a full stack developer",
+  summery:
+    "A recent graduate with a strong foundation in computer science principles and a passion for software development. Seeking an entry-level position to gain practical experience and develop my skills. Proficient in Java, Python, and data structures and algorithms. Eager to learn and contribute to a collaborative team environment.",
   themeColor: "#ff6666",
   education: [
     {

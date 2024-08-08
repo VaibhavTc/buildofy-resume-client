@@ -9,27 +9,27 @@ import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
 
 const Experience = () => {
-  const [experinceList, setExperinceList] = useState([]);
+  const [experienceList, setExperienceList] = useState([]);
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const params = useParams();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (resumeInfo?.experience.length > 0) {
-      setExperinceList(resumeInfo.experience);
+      setExperienceList(resumeInfo.experience);
     }
   }, [resumeInfo]);
 
   const handleChange = (index, event) => {
-    const newEntries = [...experinceList];
+    const newEntries = [...experienceList];
     const { name, value } = event.target;
     newEntries[index][name] = value;
-    setExperinceList(newEntries);
+    setExperienceList(newEntries);
   };
 
   const AddNewExperience = () => {
-    setExperinceList([
-      ...experinceList,
+    setExperienceList([
+      ...experienceList,
       {
         title: "",
         companyName: "",
@@ -43,27 +43,20 @@ const Experience = () => {
   };
 
   const RemoveExperience = () => {
-    setExperinceList(experinceList.slice(0, -1));
-  };
-
-  const handleRichTextEditor = (event, name, index) => {
-    const newEntries = [...experinceList];
-    newEntries[index][name] = event.target.value;
-    setExperinceList(newEntries);
+    setExperienceList(experienceList.slice(0, -1));
   };
 
   useEffect(() => {
     setResumeInfo({
       ...resumeInfo,
-      Experience: experinceList,
+      experience: experienceList,
     });
-  }, [experinceList]);
-
+  }, [experienceList, setResumeInfo]);
   const onSave = () => {
     setLoading(true);
     const data = {
       data: {
-        experience: experinceList.map((item) => ({
+        experience: experienceList.map((item) => ({
           title: item.title,
           companyName: item.companyName,
           city: item.city,
@@ -92,7 +85,7 @@ const Experience = () => {
         <h2 className="font-bold text-lg">Professional Experience</h2>
         <p>Add Your previous Job experience</p>
         <div>
-          {experinceList.map((item, index) => (
+          {experienceList.map((item, index) => (
             <div key={index}>
               <div className="grid grid-cols-2 gap-3 border p-3 my-5 rounded-lg">
                 <div>
@@ -150,8 +143,9 @@ const Experience = () => {
                     index={index}
                     defaultValue={item.workSummery}
                     onRichTextEditorChange={(event) =>
-                      handleRichTextEditor(event, "workSummery", index)
+                      handleChange(index, event)
                     }
+                    setExperienceList={setExperienceList}
                   />
                 </div>
               </div>

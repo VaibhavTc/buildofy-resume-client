@@ -28,7 +28,6 @@ function Summery({ enabledNext }) {
     setLoading(true);
     const PROMPT = prompt.replace("{jobTitle}", resumeInfo?.jobTitle);
     const result = await AIChatSession.sendMessage(PROMPT);
-
     setAiGenerateSummeryList(JSON.parse(result.response.text()));
     setLoading(false);
   };
