@@ -1,13 +1,15 @@
 import { ResumeInfoContext } from "@/context/ResumeInfoContext";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import PersonalDetailsPreview from "./preview/PersonalDetailsPreview";
 import SummaryPreview from "./preview/SummaryPreview";
 import ExperiencePreview from "./preview/ExperiencePreview";
 import EducationalPreview from "./preview/EducationalPreview";
 import SkillsPreview from "./preview/SkillsPreview";
+import dummy from "../../../data/dummy";
 
 function ResumePreview() {
   const { resumeInfo } = useContext(ResumeInfoContext);
+  
   return (
     <div
       className="shadow-lg p-14 border-t-[20px] border m-auto"

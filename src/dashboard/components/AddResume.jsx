@@ -1,6 +1,5 @@
 import { Loader2, PlusSquare } from "lucide-react";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { v4 as uuidv4 } from "uuid";
@@ -15,12 +14,16 @@ import {
 import { useUser } from "@clerk/clerk-react";
 import GlobalApi from "../../../service/GlobalApi";
 import { useNavigate } from "react-router-dom";
+import dummy from "../../data/dummy";
+import { toast } from "sonner";
+
 function AddResume() {
   const [openDialog, setOpenDialog] = useState(false);
-  const [resumeTitle, setResumeTitle] = useState();
+  const [resumeTitle, setResumeTitle] = useState("");
   const { user } = useUser();
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigate();
+  const navigate = useNavigate();
+
   const onCreate = () => {
     setLoading(true);
     const uuid = uuidv4();
@@ -32,18 +35,19 @@ function AddResume() {
         userName: user?.fullName,
       },
     };
-    GlobalApi.CreateNewResume(data).then(
-      (res) => {
-        if (res) {
-          setLoading(false);
-          navigation("/dashboard/resume/" + res.data.data.documentId + "/edit");
-        }
-      },
-      (err) => {
+    GlobalApi.CreateResumeWithDummyData(data)
+      .then((response) => {
         setLoading(false);
-      }
-    );
+        navigate("/dashboard/resume/" + response.data.documentId + "/edit");
+        toast.success("Resume Created and Updated Successfully");
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast.error("Something went wrong. Try again later.");
+        setOpenDialog(false);
+      });
   };
+
   return (
     <div>
       <div
@@ -52,15 +56,16 @@ function AddResume() {
       >
         <PlusSquare />
       </div>
-      <Dialog open={openDialog}>
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Create New Resume</DialogTitle>
             <DialogDescription>
-              <p>Add title to you resume</p>
+              <p>Add a title to your resume</p>
               <Input
                 className="my-2"
                 placeholder="Richard_Full_Stack_Resume"
+                value={resumeTitle}
                 onChange={(e) => setResumeTitle(e.target.value)}
               />
             </DialogDescription>
@@ -73,10 +78,7 @@ function AddResume() {
               >
                 Cancel
               </Button>
-              <Button
-                disabled={!resumeTitle || loading}
-                onClick={() => onCreate()}
-              >
+              <Button disabled={!resumeTitle || loading} onClick={onCreate}>
                 {loading ? (
                   <Loader2 className="animate-spin w-4 h-4" />
                 ) : (
