@@ -10,10 +10,6 @@ function Dashboard() {
   useEffect(() => {
     user && GetResumesList();
   }, [user]);
-
-  /**
-   * Used to Get Users Resume List
-   */
   const GetResumesList = () => {
     GlobalApi.GetUserResumes(user?.primaryEmailAddress?.emailAddress).then(
       (resp) => {

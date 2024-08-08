@@ -10,7 +10,7 @@ import { toast } from "sonner";
 function PersonalDetail({ enabledNext }) {
   const params = useParams();
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
-
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: resumeInfo?.firstName || "",
     lastName: resumeInfo?.lastName || "",
@@ -19,9 +19,6 @@ function PersonalDetail({ enabledNext }) {
     phone: resumeInfo?.phone || "",
     email: resumeInfo?.email || "",
   });
-
-  const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     setFormData({
       firstName: resumeInfo?.firstName || "",
@@ -40,34 +37,37 @@ function PersonalDetail({ enabledNext }) {
       ...formData,
       [name]: value,
     });
+    setResumeInfo({
+      ...resumeInfo,
+      [name]: value,
+    });
   };
 
   const onSave = (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     const data = {
-        data: formData,
+      data: formData,
     };
 
     GlobalApi.UpdateResumeDetail(params?.resumeId, data).then(
-        (resp) => {
-            enabledNext(true);
-            setLoading(false);
-            // Merge the updated personal details with the existing resumeInfo
-            setResumeInfo({
-                ...resumeInfo, // Keep the existing fields intact
-                ...formData,   // Update only the fields in formData
-            });
-            toast.success("Details updated");
-        },
-        (error) => {
-            setLoading(false);
-            toast.error("Something went wrong. Try again!");
-        }
+      (resp) => {
+        enabledNext(true);
+        setLoading(false);
+        // Merge the updated personal details with the existing resumeInfo
+        setResumeInfo({
+          ...resumeInfo, // Keep the existing fields intact
+          ...formData, // Update only the fields in formData
+        });
+        toast.success("Details updated");
+      },
+      (error) => {
+        setLoading(false);
+        toast.error("Something went wrong. Try again!");
+      }
     );
-};
-
+  };
 
   return (
     <div className="p-5 shadow-lg rounded-lg border-t-primary border-t-4 mt-10">

@@ -10,6 +10,7 @@ import { ResumeInfoContext } from "@/context/ResumeInfoContext";
 import GlobalApi from "./../../../../service/GlobalApi";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 function ThemeColor() {
   const colors = [
@@ -34,12 +35,13 @@ function ThemeColor() {
     "#FF335A",
     "#335AFF",
   ];
-
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const [selectedColor, setSelectedColor] = useState();
+  const [isSet, setIsSet] = useState(false);
   const { resumeId } = useParams();
   const onColorSelect = (color) => {
     setSelectedColor(color);
+    setIsSet(true);
     setResumeInfo({
       ...resumeInfo,
       themeColor: color,
@@ -49,8 +51,9 @@ function ThemeColor() {
         themeColor: color,
       },
     };
-    GlobalApi.UpdateResumeDetail(resumeId, data).then((resp) => {
-      toast("Theme Color Updated");
+    GlobalApi.UpdateResumeDetail(resumeId, data).then(async (resp) => {
+      await toast.success("Theme Color Updated");
+      setIsSet(false);
     });
   };
 
@@ -64,20 +67,26 @@ function ThemeColor() {
       </PopoverTrigger>
       <PopoverContent>
         <h2 className="mb-2 text-sm font-bold">Select Theme Color</h2>
-        <div className="grid grid-cols-5 gap-3">
-          {colors.map((item, index) => (
-            <div
-              onClick={() => onColorSelect(item)}
-              className={`h-5 w-5 rounded-full cursor-pointer
+        {!isSet ? (
+          <div className="grid grid-cols-5 gap-3">
+            {colors.map((item, index) => (
+              <div
+                onClick={() => onColorSelect(item)}
+                className={`h-5 w-5 rounded-full cursor-pointer
              hover:border-black border p-4
              ${selectedColor == item && "border border-black p-3"}
              `}
-              style={{
-                background: item,
-              }}
-            ></div>
-          ))}
-        </div>
+                style={{
+                  background: item,
+                }}
+              ></div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex justify-center items-center">
+            <Loader2 className="h-5 w-5 animate-spin h-32" />
+          </div>
+        )}
       </PopoverContent>
     </Popover>
   );
