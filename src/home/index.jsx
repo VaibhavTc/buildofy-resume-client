@@ -42,9 +42,9 @@ function Home() {
           <h2 className="font-bold text-3xl">How it Works?</h2>
           <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
             <div
-              className="block rounded-xl border bg-white
+              className="rounded-xl border bg-white
          border-gray-200 p-8 shadow-xl transition
-         hover:border-pink-500/10 hover:shadow-pink-500/10"
+         hover:border-pink-500/10 hover:shadow-pink-500/10 flex flex-col items-center justify-center"
             >
               <AtomIcon className="h-8 w-8" />
 
@@ -52,39 +52,47 @@ function Home() {
                 Write promt for your form
               </h2>
 
-              <p className="mt-1 text-sm text-gray-600">
+              {/* <p className="mt-1 text-sm text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut
                 quo possimus adipisci distinctio alias voluptatum blanditiis
                 laudantium.
-              </p>
+              </p> */}
             </div>
 
-            <div className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10">
+            <div
+              className="rounded-xl border bg-white
+         border-gray-200 p-8 shadow-xl transition
+         hover:border-pink-500/10 hover:shadow-pink-500/10 flex flex-col items-center justify-center"
+            >
               <Edit className="h-8 w-8" />
 
               <h2 className="mt-4 text-xl font-bold text-black">
                 Edit Your form{" "}
               </h2>
 
-              <p className="mt-1 text-sm text-gray-600">
+              {/* <p className="mt-1 text-sm text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut
                 quo possimus adipisci distinctio alias voluptatum blanditiis
                 laudantium.
-              </p>
+              </p> */}
             </div>
 
-            <div className="block rounded-xl border bg-white border-gray-200 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10">
+            <div
+              className="rounded-xl border bg-white
+         border-gray-200 p-8 shadow-xl transition
+         hover:border-pink-500/10 hover:shadow-pink-500/10 flex flex-col items-center justify-center"
+            >
               <Share2 className="h-8 w-8" />
 
               <h2 className="mt-4 text-xl font-bold text-black">
                 Share & Start Accepting Responses
               </h2>
 
-              <p className="mt-1 text-sm text-gray-600">
+              {/* <p className="mt-1 text-sm text-gray-600">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex ut
                 quo possimus adipisci distinctio alias voluptatum blanditiis
                 laudantium.
-              </p>
+              </p> */}
             </div>
           </div>
 
