@@ -26,6 +26,8 @@ function Summery({ enabledNext }) {
   const [loading, setLoading] = useState(false);
   const params = useParams();
   const [aiGeneratedSummeryList, setAiGeneratedSummeryList] = useState([]);
+  const [isAISummeryGenerated, setIsAISummeryGenerated] = useState(false);
+
   useEffect(() => {
     summery &&
       setResumeInfo({
@@ -35,16 +37,14 @@ function Summery({ enabledNext }) {
   }, [summery]);
 
   const GenerateSummeryFromAI = async () => {
-  setLoading(true);
-  const PROMPT = prompt.replace("{jobTitle}", resumeInfo?.jobTitle);
-  console.log(PROMPT);
-  const result = await AIChatSession.sendMessage(PROMPT);
-  const parsed = JSON.parse(result.response.text());
-  setAiGeneratedSummeryList(parsed); 
-  console.log("AI Summaries:", aiGeneratedSummeryList);
-  setLoading(false);
-};
-
+    setLoading(true);
+    const PROMPT = prompt.replace("{jobTitle}", resumeInfo?.jobTitle);
+    const result = await AIChatSession.sendMessage(PROMPT);
+    const parsed = JSON.parse(result.response.text());
+    setAiGeneratedSummeryList(parsed);
+    setIsAISummeryGenerated(true);
+    setLoading(false);
+  };
 
   const onSave = (e) => {
     e.preventDefault();
@@ -101,19 +101,19 @@ function Summery({ enabledNext }) {
         </form>
       </div>
 
-      {aiGeneratedSummeryList && (
+      {isAISummeryGenerated && aiGeneratedSummeryList?.length > 0 && (
         <div className="my-5">
           <h2 className="font-bold text-lg">Suggestions</h2>
-          {aiGeneratedSummeryList?.map((item, index) => (
+          {aiGeneratedSummeryList.map((item, index) => (
             <div
               key={index}
-              onClick={() => setSummery(item?.summary)}
+              onClick={() => setSummery(item.summary)}
               className="p-5 shadow-lg my-4 rounded-lg cursor-pointer hover:scale-105 transition-all"
             >
               <h2 className="font-bold my-1 text-primary">
-                Level: {item?.experience_level}
+                Level: {item.experience_level}
               </h2>
-              <p>{item?.summary}</p>
+              <p>{item.summary}</p>
             </div>
           ))}
         </div>
