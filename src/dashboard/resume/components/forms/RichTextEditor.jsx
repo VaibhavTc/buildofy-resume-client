@@ -21,8 +21,18 @@ import {
 import { AIChatSession } from "../../../../../service/AIModel";
 import { toast } from "sonner";
 
-const PROMPT =
-  "Don't give result in JSON format, don't give any commas to separate bullet points. position title: {positionTitle},company name:{companyName} , depending on position title give me 4-5 bullet points for my experience to add in resume please do not include any kind of title and provide me HTML only with proper tags for bullet points not direct bullet points. Give me tags only not json format and don't give me an array I want separate bullets points also don't use commas to separate bullet points.";
+const PROMPT = `
+    Position Title: {positionTitle}
+    Company Name: {companyName}
+
+    Generate 4-5 bullet points for this work experience to add to a resume. 
+    - Do NOT return JSON or arrays. 
+    - Do NOT include any extra text or titles. 
+    - Do NOT separate bullet points with commas. 
+    - Return proper HTML only, using <ul> for the list and <li> for each bullet point. 
+    - Each bullet point should be concise, achievement-focused, and action-oriented.
+    - Do not add any other tags or explanations.
+  `;
 
 function RichTextEditor({
   onRichTextEditorChange,
@@ -45,16 +55,26 @@ function RichTextEditor({
       resumeInfo.experience[index].title
     ).replace("{companyName}", resumeInfo?.experience[index].companyName);
     const result = await AIChatSession.sendMessage(prompt);
-    const resp = await result.response.text(); // Wait for text response
-    setValue(resp.replace('"', '"'));
+    const resp = await result.response.text();
+    let htmlBulletPoints = resp;
 
-    // Update the experience list directly
+    try {
+      const parsed = JSON.parse(resp);
+      if (parsed.bulletPoints) {
+        htmlBulletPoints = `<ul>${parsed.bulletPoints
+          .map((point) => `<li>${point}</li>`)
+          .join("")}</ul>`;
+      }
+    } catch (err) {
+      console.error("Error parsing AI response:", err);
+    }
+
     setExperienceList((prev) => {
       const newEntries = [...prev];
-      newEntries[index].workSummery = resp.replace('"', '"');
+      newEntries[index].workSummery = htmlBulletPoints; // save as HTML
       return newEntries;
     });
-
+    setValue(htmlBulletPoints);
     setLoading(false);
   };
 
@@ -82,16 +102,18 @@ function RichTextEditor({
         <Editor
           value={value}
           onChange={(e) => {
-            setValue(e.target.value);
-            onRichTextEditorChange({ target: { value: e.target.value } });
+            const html = e.target.value;
+            setValue(html);
+            onRichTextEditorChange({ target: { value: html } });
 
-            // Also update the experience list directly
             setExperienceList((prev) => {
               const newEntries = [...prev];
-              newEntries[index].workSummery = e.target.value;
+              newEntries[index].workSummery = html;
               return newEntries;
             });
           }}
+          contentEditable
+          dangerouslySetInnerHTML={{ __html: value }} // Render HTML properly
         >
           <Toolbar>
             <BtnBold />

@@ -8,14 +8,24 @@ import { Brain, LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
 import { AIChatSession } from "../../../../../service/AIModel";
 
-const prompt =
-  "Job Title: {jobTitle} , Depends on job title give me list of  summery for 3 experience level, Mid Level and Freasher level in 3 -4 lines in array format, With summery and experience_level Field in JSON Format";
+const prompt = `Job Title: {jobTitle}  
+Generate a list of 3 professional summaries for this job title.  
+Each summary should be 3–4 lines long and correspond to one of these experience levels:  
+1. Fresher Level  
+2. Mid Level  
+3. Senior Level  
+
+Return the result strictly as a JSON array (no extra text, no explanations).  
+Each object in the array must have exactly these two fields:  
+- "summary" (string, 3–4 lines)  
+- "experience_level" (one of: "Fresher Level", "Mid Level", "Senior Level")`;
+
 function Summery({ enabledNext }) {
   const { resumeInfo, setResumeInfo } = useContext(ResumeInfoContext);
   const [summery, setSummery] = useState();
   const [loading, setLoading] = useState(false);
   const params = useParams();
-  const [aiGeneratedSummeryList, setAiGenerateSummeryList] = useState();
+  const [aiGeneratedSummeryList, setAiGeneratedSummeryList] = useState([]);
   useEffect(() => {
     summery &&
       setResumeInfo({
@@ -25,12 +35,16 @@ function Summery({ enabledNext }) {
   }, [summery]);
 
   const GenerateSummeryFromAI = async () => {
-    setLoading(true);
-    const PROMPT = prompt.replace("{jobTitle}", resumeInfo?.jobTitle);
-    const result = await AIChatSession.sendMessage(PROMPT);
-    setAiGenerateSummeryList(JSON.parse(result.response.text()));
-    setLoading(false);
-  };
+  setLoading(true);
+  const PROMPT = prompt.replace("{jobTitle}", resumeInfo?.jobTitle);
+  console.log(PROMPT);
+  const result = await AIChatSession.sendMessage(PROMPT);
+  const parsed = JSON.parse(result.response.text());
+  setAiGeneratedSummeryList(parsed); 
+  console.log("AI Summaries:", aiGeneratedSummeryList);
+  setLoading(false);
+};
+
 
   const onSave = (e) => {
     e.preventDefault();
